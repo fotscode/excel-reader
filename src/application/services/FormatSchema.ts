@@ -10,6 +10,7 @@ function convertStringToJson(format: string) {
     return JSON.parse(format.replace(/Array</g, "[").replace(/>/g, "]").replace(/\b(\w+\??)/g, '"$1"'));
 }
 
+// solves RNF #1
 // parses primitive types to functions depending on underlying database (parseType implementation)
 // e.g: "String" => { type: String, set: setFn, required: true } in case of mongoose
 // e.g: "Number" => { type: Number, set: setFn, required: true } in case of mongoose
@@ -77,17 +78,17 @@ function getRowErrors(row: number, errors: any, schema: any): RowCol[] {
     return res
 }
 
-function fillRowObject(row: any, values: any[], schema: any) {
-    let schemaKeys = Object.keys(schema) as string[]
-    let schemaValues = Object.values(schema) as any[]
+function fillRowObject(row: any, values: any[], schema: { [key: string]: any }) {
+    let schemaKeys = Object.keys(schema)
+    let schemaValues = Object.values(schema)
     for (let i = 0; i < schemaKeys.length; i++) {
-        let finalValue = values[i]
+        let finalValue = values[i] // RNF #1
         if (typeof values[i] === "string" && values[i].includes(",")) {
             finalValue = values[i].split(",")
                 .map((v: string) => v.trim())
             let type = schemaValues[i].type[0].type
             if (type === Number) {
-                finalValue = finalValue.map(type).sort((a: number, b: number) => a - b)
+                finalValue = finalValue.map(type).sort((a: number, b: number) => a - b) // RNF #4
             }
         }
         row[schemaKeys[i]] = finalValue
