@@ -6,6 +6,7 @@ import XLSX from "xlsx";
 import amqp from "amqplib";
 import mongoose from "mongoose";
 import path from "path";
+import { Status } from "src/domain/models/UploadStatus";
 
 // TODO: change with .env
 const queueName = "csv";
@@ -40,7 +41,7 @@ async function startConsumer() {
         return;
       }
       console.log("Processing uploadUUID:", uploadUUID);
-      await uploadRepo.updateUploadStatus(uploadStatus, "processing");
+      await uploadRepo.updateUploadStatus(uploadStatus, Status.PROCESSING);
       // encapsulate following
       let format = convertStringToJson(uploadStatus.format)
       let schema = createSchemaFromJSON(format);
@@ -90,7 +91,7 @@ async function startConsumer() {
       if (errors.length > 0) {
         await ProcessError.insertMany(errors, { ordered: false })
       }
-      await uploadRepo.updateUploadStatus(uploadStatus, "done");
+      await uploadRepo.updateUploadStatus(uploadStatus, Status.DONE);
       channel.ack(msg);
     },
     { noAck: false }

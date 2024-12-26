@@ -1,11 +1,17 @@
 import mongoose, { Document } from 'mongoose'
 
+enum Status {
+  PENDING = 'pending',
+  PROCESSING = 'processing',
+  DONE = 'done'
+}
+
 interface IUploadStatus extends Document {
   uploadUUID: string;
   timestamp_enqueued: string;
   timestamp_started: string;
   timestamp_finished: string;
-  status: string; // TODO: enum
+  status: Status;
   format: string;
   filename: string;
 }
@@ -22,13 +28,13 @@ const uploadStatusSchema = new mongoose.Schema<IUploadStatus>({
 
 uploadStatusSchema.pre('save', function (next) {
   const now = new Date().toISOString()
-  if (this.status === 'pending' && !this.timestamp_enqueued) {
+  if (this.status === Status.PENDING && !this.timestamp_enqueued) {
     this.timestamp_enqueued = now
   }
-  if (this.status === 'processing' && !this.timestamp_started) {
+  if (this.status === Status.PROCESSING && !this.timestamp_started) {
     this.timestamp_started = now
   }
-  if (this.status === 'done' && !this.timestamp_finished) {
+  if (this.status === Status.DONE && !this.timestamp_finished) {
     this.timestamp_finished = now
   }
   next()
@@ -36,5 +42,5 @@ uploadStatusSchema.pre('save', function (next) {
 
 const UploadStatus = mongoose.model<IUploadStatus>("UploadStatus", uploadStatusSchema)
 
-export { IUploadStatus }
+export { IUploadStatus, Status }
 export default UploadStatus
