@@ -1,6 +1,7 @@
-import amqp from "amqplib";
+import amqp, { Channel } from "amqplib";
+import ProcessMessage from "./ProcessMessage";
 
-let channel;
+let channel: Channel;
 // TODO: change with .env
 const queueName = "csv";
 
@@ -11,7 +12,7 @@ async function connectRabbitMQ() {
   await channel.assertQueue(queueName, { durable: true });
 }
 
-async function sendMessageToQueue(message) {
+async function sendMessageToQueue(message: ProcessMessage) {
   if (!channel) {
     throw new Error("RabbitMQ channel is not initialized.");
   }

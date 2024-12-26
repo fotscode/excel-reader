@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 
 // function to parse primitive types for mongoose schemas
-function parseType(type, isRequired) {
-    const setFn = (value) => {
+function parseType(type: string, isRequired: boolean) {
+    const setFn = (value: any) => {
         if (typeof value != type.toLowerCase()) {
             throw new Error("Not valid type")
         }
@@ -24,7 +24,7 @@ function parseType(type, isRequired) {
     }
 }
 
-function createModelFromSchema(schema, modelName) {
+function createModelFromSchema(schema: any, modelName: string) {
     const model = mongoose.model(modelName, schema, modelName);
     return model;
 }

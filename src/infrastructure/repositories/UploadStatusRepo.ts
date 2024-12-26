@@ -1,11 +1,11 @@
-import UploadStatus from '../../domain/models/UploadStatus.js';
+import UploadStatus from '@domain/models/UploadStatus';
 import { v4 } from 'uuid';
 
-const findUploadStatusByUUID = async (uuid) => {
+const findUploadStatusByUUID = async (uuid: string) => {
     return UploadStatus.findOne({ uploadUUID: uuid });
 }
 
-const createPendingUploadStatus = async (format, filename) => {
+const createPendingUploadStatus = async (format: string, filename: string) => {
     const newStatus = new UploadStatus({
         timestamp_enqueued: new Date().toISOString(),
         uploadUUID: v4(),

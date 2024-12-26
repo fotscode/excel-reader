@@ -1,10 +1,10 @@
-#!/usr/bin/env node
-
 /**
  * Module dependencies.
  */
 
-import app from '../app.js';
+// @ts-ignore
+import app from 'src/app';
+// @ts-ignore
 import debug from 'debug';
 import http from 'http';
 
@@ -35,7 +35,7 @@ server.on('listening', onListening);
  * Normalize a port into a number, string, or false.
  */
 
-function normalizePort(val) {
+function normalizePort(val: string): string | number | boolean {
   var port = parseInt(val, 10);
 
   if (isNaN(port)) {
@@ -55,7 +55,7 @@ function normalizePort(val) {
  * Event listener for HTTP server "error" event.
  */
 
-function onError(error) {
+function onError(error: NodeJS.ErrnoException) {
   if (error.syscall !== 'listen') {
     throw error;
   }
@@ -85,6 +85,9 @@ function onError(error) {
 
 function onListening() {
   var addr = server.address();
+  if (addr === null) {
+    return;
+  }
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;

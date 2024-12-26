@@ -2,8 +2,8 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import mongoose from 'mongoose';
-import indexRouter from './interface/routes/index.js';
-import { connectRabbitMQ } from './infrastructure/queues/publisher.js'
+import indexRouter from '@interface/routes/index';
+import { connectRabbitMQ } from '@infrastructure/queues/publisher'
 
 // move to infra and use in www
 mongoose.connect('mongodb://127.0.0.1:27017/koibanx_challenge')
@@ -20,7 +20,7 @@ app.use(cookieParser());
 // move to infra and use in www
 connectRabbitMQ()
   .then(() => console.log("Connected to RabbitMQ"))
-  .catch((err) => console.error("RabbitMQ connection error:", err));
+  .catch((err: any) => console.error("RabbitMQ connection error:", err));
 
 app.use('/', indexRouter);
 

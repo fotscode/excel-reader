@@ -1,11 +1,10 @@
-import { convertStringToJson, createSchemaFromJSON, getRowErrors, fillRowObject } from "../../application/services/FormatSchema.js";
-import { createModelFromSchema } from "../../infrastructure/repositories/DynamicFileRepo.js";
-import UploadStatus from "../../domain/models/UploadStatus.js";
-import ProcessError from "../../domain/models/ProcessError.js";
+import { convertStringToJson, createSchemaFromJSON, getRowErrors, fillRowObject } from "@application/services/FormatSchema";
+import { createModelFromSchema } from "@infrastructure/repositories/DynamicFileRepo";
+import UploadStatus from "@domain/models/UploadStatus";
+import ProcessError from "@domain/models/ProcessError";
 import XLSX from "xlsx";
 import amqp from "amqplib";
 import mongoose from "mongoose";
-
 
 // TODO: change with .env
 const queueName = "csv";
@@ -26,6 +25,10 @@ async function startConsumer() {
   channel.consume(
     queueName,
     async (msg) => {
+      if (!msg) {
+        console.error("Empty message");
+        return;
+      }
       const message = JSON.parse(msg.content.toString());
       const uploadUUID = message.uploadUUID;
       // encapsulate this as a service
@@ -45,8 +48,8 @@ async function startConsumer() {
       const sheetName = workbook.SheetNames[0];
       const sheet = workbook.Sheets[sheetName];
       const data = XLSX.utils.sheet_to_json(sheet, { header: 1 }).slice(1);
-      let rows = []
-      data.forEach((row, index) => {
+      let rows = [] as typeof DynamicModel[];
+      data.forEach((row: any, index) => {
         let obj = new DynamicModel()
         fillRowObject(obj, row, schema)
         let error = obj.validateSync();
@@ -63,7 +66,7 @@ async function startConsumer() {
           })
         } else {
           rows.push(obj)
-          if (rows.length === 1024) { // config
+          if (rows.length === 8192) { // config
             DynamicModel.insertMany(rows, { ordered: false })
             rows = [];
           }

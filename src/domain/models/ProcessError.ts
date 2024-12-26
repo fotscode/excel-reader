@@ -1,6 +1,13 @@
 import mongoose from 'mongoose';
 
-const processErrorSchema = new mongoose.Schema({
+interface IProcessError {
+  _upload: mongoose.Schema.Types.ObjectId;
+  uploadUUID: string;
+  row: number;
+  col: number;
+}
+
+const processErrorSchema = new mongoose.Schema<IProcessError>({
   _upload: { type: mongoose.Schema.Types.ObjectId, ref: 'UploadStatus' },
   uploadUUID: String,
   row: Number,

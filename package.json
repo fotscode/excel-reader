@@ -2,12 +2,11 @@
   "name": "koibanx-challenge",
   "version": "0.0.0",
   "private": true,
-  "type": "module",
   "scripts": {
-    "start": "node ./src/bin/www",
-    "dev": "nodemon ./src/bin/www",
-    "consumer": "node ./src/infrastructure/queues/consumer.js",
-    "consumerDev": "nodemon ./src/infrastructure/queues/consumer.js"
+    "start": "ts-node ./src/bin/www.ts",
+    "dev": "nodemon --exec 'ts-node -r tsconfig-paths/register' ./src/bin/www.ts",
+    "consumer": "ts-node ./src/infrastructure/queues/consumer.ts",
+    "consumerDev": "nodemon  --exec 'ts-node -r tsconfig-paths/register' ./src/infrastructure/queues/consumer.ts"
   },
   "dependencies": {
     "amqplib": "^0.10.5",
@@ -21,9 +20,15 @@
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
+    "@types/amqplib": "^0.10.6",
+    "@types/cookie-parser": "^1.4.8",
     "@types/express": "^5.0.0",
+    "@types/mongoose": "^5.11.96",
+    "@types/morgan": "^1.9.9",
+    "@types/multer": "^1.4.12",
     "@types/node": "^22.10.2",
     "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.7.2"
   }
 }

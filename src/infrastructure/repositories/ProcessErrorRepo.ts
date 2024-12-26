@@ -1,6 +1,6 @@
-import ProcessError from "../../domain/models/ProcessError.js";
+import ProcessError from "@domain/models/ProcessError";
 
-const findErrorsPaginatedAndSorted = async (uploadUUID, page, limit, sort = 'asc') => {
+const findErrorsPaginatedAndSorted = async (uploadUUID: string, page: number, limit: number, sort = 'asc') => {
     if (!uploadUUID) {
         return new Error('Upload UUID is required');
     }

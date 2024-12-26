@@ -1,12 +1,12 @@
 import { Router } from 'express';
-import upload from '../../infrastructure/middleware/upload.js';
-import queues from '../../infrastructure/queues/publisher.js';
-import uploadRepo from '../../infrastructure/repositories/UploadStatusRepo.js';
-import errorsRepo from '../../infrastructure/repositories/ProcessErrorRepo.js';
+import upload from '@infrastructure/middleware/upload';
+import queues from '@infrastructure/queues/publisher';
+import uploadRepo from '@infrastructure/repositories/UploadStatusRepo';
+import errorsRepo from '@infrastructure/repositories/ProcessErrorRepo';
 
 const router = Router();
 
-router.post('/upload', upload.single('file'), async (req, res) => {
+router.post('/upload', upload.single('file'), async (req: any, res) => {
   const savedStatus = await uploadRepo.createPendingUploadStatus(req.body.format, req.file.filename);
   const { uploadUUID, format, filename } = savedStatus;
   queues.sendMessageToQueue({ uploadUUID, format, filename });
@@ -20,7 +20,10 @@ router.get('/status/:uploadUUID', async (req, res) => {
     res.status(404).json({ "message": "UploadStatus not found" }); // TODO: make better error handling
     return;
   }
-  const errors = await errorsRepo.findErrorsPaginatedAndSorted(uploadUUID, req.query.page, req.query.limit, req.query.sort);
+  const page = req.query.page ? parseInt(req.query.page as string) : 1;
+  const limit = req.query.limit ? parseInt(req.query.limit as string) : 10;
+  const sort = req.query.sort ? req.query.sort as string : 'asc';
+  const errors = await errorsRepo.findErrorsPaginatedAndSorted(uploadUUID, page, limit, sort);
   // TODO: encapsulate the following response in an object
   res.json({
     uploadUUID,

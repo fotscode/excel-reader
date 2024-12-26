@@ -1,6 +1,16 @@
 import mongoose from 'mongoose'
 
-const uploadStatusSchema = new mongoose.Schema({
+interface IUploadStatus {
+  uploadUUID: string;
+  timestamp_enqueued: string;
+  timestamp_started: string;
+  timestamp_finished: string;
+  status: string;
+  format: string;
+  filename: string;
+}
+
+const uploadStatusSchema = new mongoose.Schema<IUploadStatus>({
   uploadUUID: String,
   timestamp_enqueued: Date,
   timestamp_started: Date,
