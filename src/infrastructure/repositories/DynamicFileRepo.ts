@@ -20,7 +20,7 @@ function parseType(type: string, isRequired: boolean) {
         case 'objectid':
             return { type: mongoose.Schema.Types.ObjectId, set: setFn, required: isRequired };
         default:
-            throw new Error(`Unsupported type "${type}"`);
+            return { type: mongoose.Schema.Types.Mixed };
     }
 }
 
