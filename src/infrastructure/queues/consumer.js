@@ -1,10 +1,11 @@
-const XLSX = require("xlsx");
-const amqp = require("amqplib");
-const mongoose = require('mongoose');
-const UploadStatus = require("../../domain/models/UploadStatus.js")
-const ProcessError = require("../../domain/models/ProcessError.js")
-const { convertStringToJson, createSchemaFromJSON, getRowErrors, fillRowObject } = require("../../application/services/FormatSchema.js");
-const { createModelFromSchema } = require("../../infrastructure/repositories/DynamicFileRepo.js");
+import { convertStringToJson, createSchemaFromJSON, getRowErrors, fillRowObject } from "../../application/services/FormatSchema.js";
+import { createModelFromSchema } from "../../infrastructure/repositories/DynamicFileRepo.js";
+import UploadStatus from "../../domain/models/UploadStatus.js";
+import ProcessError from "../../domain/models/ProcessError.js";
+import XLSX from "xlsx";
+import amqp from "amqplib";
+import mongoose from "mongoose";
+
 
 // TODO: change with .env
 const queueName = "csv";
@@ -82,4 +83,3 @@ async function startConsumer() {
 }
 
 startConsumer().catch((err) => console.error("Consumer error:", err));
-

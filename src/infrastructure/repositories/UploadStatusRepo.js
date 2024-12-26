@@ -1,5 +1,5 @@
-const uuid = require('uuid');
-const UploadStatus = require('../../domain/models/UploadStatus');
+import UploadStatus from '../../domain/models/UploadStatus.js';
+import { v4 } from 'uuid';
 
 const findUploadStatusByUUID = async (uuid) => {
     return UploadStatus.findOne({ uploadUUID: uuid });
@@ -8,7 +8,7 @@ const findUploadStatusByUUID = async (uuid) => {
 const createPendingUploadStatus = async (format, filename) => {
     const newStatus = new UploadStatus({
         timestamp_enqueued: new Date().toISOString(),
-        uploadUUID: uuid.v4(),
+        uploadUUID: v4(),
         status: 'pending',
         format: format,
         filename: filename,
@@ -16,7 +16,4 @@ const createPendingUploadStatus = async (format, filename) => {
     return newStatus.save();
 }
 
-module.exports = {
-    findUploadStatusByUUID,
-    createPendingUploadStatus
-}
+export default { findUploadStatusByUUID, createPendingUploadStatus }

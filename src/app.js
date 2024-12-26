@@ -1,11 +1,9 @@
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-const mongoose = require('mongoose');
-
-var indexRouter = require('./interface/routes/index');
-const { connectRabbitMQ } = require("./infrastructure/queues/publisher.js");
+import express from 'express';
+import cookieParser from 'cookie-parser';
+import logger from 'morgan';
+import mongoose from 'mongoose';
+import indexRouter from './interface/routes/index.js';
+import { connectRabbitMQ } from './infrastructure/queues/publisher.js'
 
 // move to infra and use in www
 mongoose.connect('mongodb://127.0.0.1:27017/koibanx_challenge')
@@ -26,4 +24,4 @@ connectRabbitMQ()
 
 app.use('/', indexRouter);
 
-module.exports = app;
+export default app

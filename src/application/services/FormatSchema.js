@@ -1,4 +1,4 @@
-const { parseType } = require('../../infrastructure/repositories/DynamicFileRepo.js');
+import { parseType } from '../../infrastructure/repositories/DynamicFileRepo.js';
 
 // converts format string to json format
 // e.g: "{test: Array<String>}" => {test:["String"]}
@@ -94,4 +94,5 @@ function fillRowObject(row, values, schema) {
     return row
 }
 
-module.exports = { convertStringToJson, createSchemaFromJSON, getRowErrors, fillRowObject }
+export { convertStringToJson, createSchemaFromJSON, getRowErrors, fillRowObject }
+export default { convertStringToJson, createSchemaFromJSON, getRowErrors, fillRowObject }

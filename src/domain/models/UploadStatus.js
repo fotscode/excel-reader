@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose'
 
 const uploadStatusSchema = new mongoose.Schema({
   uploadUUID: String,
@@ -7,10 +7,9 @@ const uploadStatusSchema = new mongoose.Schema({
   timestamp_finished: Date,
   status: String,
   format: String,
-  filename: String,
-  errors: [{ type: mongoose.Schema.Types.ObjectId, ref: 'ProcessError' }]
+  filename: String
 })
 
 const UploadStatus = mongoose.model("UploadStatus", uploadStatusSchema)
 
-module.exports = UploadStatus
+export default UploadStatus

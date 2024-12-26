@@ -1,10 +1,10 @@
-const express = require('express');
-const router = express.Router();
-const upload = require('../../infrastructure/middleware/upload.js');
+import { Router } from 'express';
+import upload from '../../infrastructure/middleware/upload.js';
+import queues from '../../infrastructure/queues/publisher.js';
+import uploadRepo from '../../infrastructure/repositories/UploadStatusRepo.js';
+import errorsRepo from '../../infrastructure/repositories/ProcessErrorRepo.js';
 
-const queues = require("../../infrastructure/queues/publisher.js");
-const uploadRepo = require("../../infrastructure/repositories/UploadStatusRepo.js");
-const errorsRepo = require("../../infrastructure/repositories/ProcessErrorRepo.js");
+const router = Router();
 
 router.post('/upload', upload.single('file'), async (req, res) => {
   const savedStatus = await uploadRepo.createPendingUploadStatus(req.body.format, req.file.filename);
@@ -21,7 +21,7 @@ router.get('/status/:uploadUUID', async (req, res) => {
     return;
   }
   const errors = await errorsRepo.findErrorsPaginatedAndSorted(uploadUUID, req.query.page, req.query.limit, req.query.sort);
-  // encapsulate the following response in an object
+  // TODO: encapsulate the following response in an object
   res.json({
     uploadUUID,
     status: uploadStatus.status,
@@ -32,4 +32,4 @@ router.get('/status/:uploadUUID', async (req, res) => {
   })
 })
 
-module.exports = router;
+export default router

@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const processErrorSchema = new mongoose.Schema({
   _upload: { type: mongoose.Schema.Types.ObjectId, ref: 'UploadStatus' },
@@ -9,4 +9,4 @@ const processErrorSchema = new mongoose.Schema({
 
 const ProcessError = mongoose.model("ProcessError", processErrorSchema)
 
-module.exports = ProcessError
+export default ProcessError

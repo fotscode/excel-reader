@@ -1,4 +1,5 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
+
 // function to parse primitive types for mongoose schemas
 function parseType(type, isRequired) {
     const setFn = (value) => {
@@ -28,5 +29,5 @@ function createModelFromSchema(schema, modelName) {
     return model;
 }
 
-
-module.exports = { parseType, createModelFromSchema }
+export { parseType, createModelFromSchema }
+export default { parseType, createModelFromSchema }

@@ -1,4 +1,4 @@
-const amqp = require("amqplib");
+import amqp from "amqplib";
 
 let channel;
 // TODO: change with .env
@@ -19,5 +19,5 @@ async function sendMessageToQueue(message) {
   console.log("Message sent:", message);
 }
 
-module.exports = { connectRabbitMQ, sendMessageToQueue };
-
+export { connectRabbitMQ, sendMessageToQueue };
+export default { connectRabbitMQ, sendMessageToQueue };

@@ -1,4 +1,4 @@
-const ProcessError = require("../../domain/models/ProcessError.js")
+import ProcessError from "../../domain/models/ProcessError.js";
 
 const findErrorsPaginatedAndSorted = async (uploadUUID, page, limit, sort = 'asc') => {
     if (!uploadUUID) {
@@ -38,6 +38,4 @@ const findErrorsPaginatedAndSorted = async (uploadUUID, page, limit, sort = 'asc
     }
 }
 
-module.exports = {
-    findErrorsPaginatedAndSorted
-}
+export default { findErrorsPaginatedAndSorted }
