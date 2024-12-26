@@ -1,4 +1,4 @@
-import UploadStatus from '@domain/models/UploadStatus';
+import UploadStatus, { IUploadStatus } from '@domain/models/UploadStatus';
 import { v4 } from 'uuid';
 
 const findUploadStatusByUUID = async (uuid: string) => {
@@ -15,4 +15,10 @@ const createPendingUploadStatus = async (format: string, filename: string) => {
     return newStatus.save();
 }
 
-export default { findUploadStatusByUUID, createPendingUploadStatus }
+const updateUploadStatus = async (uploadStatus: IUploadStatus, status: string) => {
+    uploadStatus.status = status;
+    return uploadStatus.save();
+}
+
+
+export default { findUploadStatusByUUID, createPendingUploadStatus, updateUploadStatus }
