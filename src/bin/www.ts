@@ -2,11 +2,9 @@
  * Module dependencies.
  */
 
-// @ts-ignore
 import app from 'src/app';
-// @ts-ignore
 import debug from 'debug';
-import http from 'http';
+import * as http from 'http';
 
 debug('koibanx-challenge:server');
 

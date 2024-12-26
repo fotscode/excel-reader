@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-interface IProcessError {
+interface IProcessError extends Document {
   _upload: mongoose.Schema.Types.ObjectId;
   uploadUUID: string;
   row: number;
@@ -16,4 +16,5 @@ const processErrorSchema = new mongoose.Schema<IProcessError>({
 
 const ProcessError = mongoose.model("ProcessError", processErrorSchema)
 
+export { IProcessError }
 export default ProcessError
