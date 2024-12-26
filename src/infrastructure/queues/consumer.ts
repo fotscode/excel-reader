@@ -37,7 +37,6 @@ async function startConsumer() {
         console.error("UploadStatus not found for uploadUUID:", uploadUUID);
         return;
       }
-      uploadStatus.timestamp_started = new Date().toISOString();
       uploadStatus.status = "processing";
       await uploadStatus.save();
       // encapsulate following
@@ -73,9 +72,8 @@ async function startConsumer() {
         }
       });
       if (rows.length > 0) {
-        DynamicModel.insertMany(rows, { ordered: false })
+        await DynamicModel.insertMany(rows, { ordered: false })
       }
-      uploadStatus.timestamp_finished = new Date().toISOString()
       uploadStatus.status = "done"
       uploadStatus.save()
 

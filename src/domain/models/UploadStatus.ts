@@ -20,6 +20,20 @@ const uploadStatusSchema = new mongoose.Schema<IUploadStatus>({
   filename: String
 })
 
+uploadStatusSchema.pre('save', function (next) {
+  const now = new Date().toISOString()
+  if (this.status === 'pending') {
+    this.timestamp_enqueued = now
+  }
+  if (this.status === 'processing') {
+    this.timestamp_started = now
+  }
+  if (this.status === 'done') {
+    this.timestamp_finished = now
+  }
+  next()
+})
+
 const UploadStatus = mongoose.model("UploadStatus", uploadStatusSchema)
 
 export default UploadStatus

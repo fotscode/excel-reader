@@ -7,7 +7,6 @@ const findUploadStatusByUUID = async (uuid: string) => {
 
 const createPendingUploadStatus = async (format: string, filename: string) => {
     const newStatus = new UploadStatus({
-        timestamp_enqueued: new Date().toISOString(),
         uploadUUID: v4(),
         status: 'pending',
         format: format,
