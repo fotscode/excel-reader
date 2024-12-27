@@ -1,0 +1,474 @@
+{
+	"info": {
+		"_postman_id": "a81fa2cf-b041-4f20-99d9-a0184785901e",
+		"name": "Excel Reader",
+		"description": "API Collection de Excel Reader\n\nPara la autenticacion se utiliza `Basic authorization` por lo que se proveen distintos ejemplos con usuarios ya provistos.\n\n- admin:admin tiene el rol admin\n    \n- watcher:watcher tiene el rol watcher\n    \n- empty:empty no tiene ningun rol\n    \n- sin usuario, se provee un ejemplo del comportamiento de la api en esta situacion\n    \n\nEn el caso de `Consultar estado` se provee un ejemplo extra con paginacion en los parametros de la query.\n\nPor otra parte en todas las requests de `Subir archivo` se provee ejemplos de formato en el body de la request, a su vez con el archivo que se debe subir.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22862029"
+	},
+	"item": [
+		{
+			"name": "Consultar estado",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/status/4c5d7b73-0c72-4d25-b7a3-477b4058480b",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"status",
+						"4c5d7b73-0c72-4d25-b7a3-477b4058480b"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "con paginacion",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Basic {{watcher:watcher}}",
+								"description": "watcher:watcher",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:3000/status/68e628dd-df9d-4e70-82c1-eb619b258880?limit=5&page=2",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"status",
+								"68e628dd-df9d-4e70-82c1-eb619b258880"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "5"
+								},
+								{
+									"key": "page",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				},
+				{
+					"name": "con admin",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Basic {{admin:admin}}",
+								"description": "admin:admin",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:3000/status/4c5d7b73-0c72-4d25-b7a3-477b4058480b",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"status",
+								"4c5d7b73-0c72-4d25-b7a3-477b4058480b"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				},
+				{
+					"name": "con watcher",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Basic {{watcher:watcher}}",
+								"description": "watcher:watcher",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:3000/status/4c5d7b73-0c72-4d25-b7a3-477b4058480b",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"status",
+								"4c5d7b73-0c72-4d25-b7a3-477b4058480b"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				},
+				{
+					"name": "con empty",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Basic {{empty:empty}}",
+								"description": "empty:empty",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:3000/status/4c5d7b73-0c72-4d25-b7a3-477b4058480b",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"status",
+								"4c5d7b73-0c72-4d25-b7a3-477b4058480b"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				},
+				{
+					"name": "sin usuario",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/status/68e628dd-df9d-4e70-82c1-eb619b258880?limit=5&page=2",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"status",
+								"68e628dd-df9d-4e70-82c1-eb619b258880"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "5"
+								},
+								{
+									"key": "page",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				}
+			]
+		},
+		{
+			"name": "Subir archivo",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"description": "Archivo local a subir",
+							"type": "file",
+							"src": "/home/fots/testing-mongoose/name_age_nums_200k.xlsx"
+						},
+						{
+							"key": "format",
+							"value": "{name: String, age: Number, nums: Array<Number>}",
+							"description": "Formato",
+							"type": "text"
+						},
+						{
+							"key": "format",
+							"value": "{age: Number, name: String, nums?: Array<Number>}",
+							"description": "Formato 2",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:3000/upload/",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"upload",
+						""
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "con admin",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Basic {{admin:admin}}",
+								"description": "admin:admin",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"description": "Archivo local a subir",
+									"type": "file",
+									"src": "/home/fots/testing-mongoose/name_age_nums_200k.xlsx"
+								},
+								{
+									"key": "format",
+									"value": "{name: String, age: Number, nums: Array<Number>}",
+									"description": "Formato",
+									"type": "text"
+								},
+								{
+									"key": "format",
+									"value": "{age: Number, name: String, nums?: Array<Number>}",
+									"description": "Formato 2",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:3000/upload/",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"upload",
+								""
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				},
+				{
+					"name": "con watcher",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Basic {{watcher:watcher}}",
+								"description": "watcher:watcher",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"description": "Archivo local a subir",
+									"type": "file",
+									"src": "/home/fots/testing-mongoose/name_age_nums_200k.xlsx"
+								},
+								{
+									"key": "format",
+									"value": "{name: String, age: Number, nums: Array<Number>}",
+									"description": "Formato",
+									"type": "text"
+								},
+								{
+									"key": "format",
+									"value": "{age: Number, name: String, nums?: Array<Number>}",
+									"description": "Formato 2",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:3000/upload/",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"upload",
+								""
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				},
+				{
+					"name": "con empty",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Basic {{empty:empty}}",
+								"description": "empty:empty",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"description": "Archivo local a subir",
+									"type": "file",
+									"src": "/home/fots/testing-mongoose/name_age_nums_200k.xlsx"
+								},
+								{
+									"key": "format",
+									"value": "{name: String, age: Number, nums: Array<Number>}",
+									"description": "Formato",
+									"type": "text"
+								},
+								{
+									"key": "format",
+									"value": "{age: Number, name: String, nums?: Array<Number>}",
+									"description": "Formato 2",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:3000/upload/",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"upload",
+								""
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				},
+				{
+					"name": "sin usuario",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"description": "Archivo local a subir",
+									"type": "file",
+									"src": "/home/fots/testing-mongoose/name_age_nums_200k.xlsx"
+								},
+								{
+									"key": "format",
+									"value": "{name: String, age: Number, nums: Array<Number>}",
+									"description": "Formato",
+									"type": "text"
+								},
+								{
+									"key": "format",
+									"value": "{age: Number, name: String, nums?: Array<Number>}",
+									"description": "Formato 2",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:3000/upload/",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"upload",
+								""
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "empty:empty",
+			"value": "ZW1wdHk6ZW1wdHk="
+		},
+		{
+			"key": "watcher:watcher",
+			"value": "d2F0Y2hlcjp3YXRjaGVy"
+		},
+		{
+			"key": "admin:admin",
+			"value": "YWRtaW46YWRtaW4="
+		}
+	]
+}
