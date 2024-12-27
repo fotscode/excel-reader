@@ -2,7 +2,10 @@ import ProcessError, { IProcessError } from '@domain/models/ProcessError'
 import RowCol from '@application/interfaces/RowCol'
 import { IUploadStatus } from '@domain/models/UploadStatus'
 import { saveBatch } from './common'
-import { ProcessErrorsPaginatedResponse } from './interfaces/ProcessErrorRepoInterfaces'
+import {
+    FindErrorsPaginatedAndSortedParams,
+    ProcessErrorsPaginatedResponse,
+} from './interfaces/ProcessErrorRepoInterfaces'
 import { ECODES, findError, IError } from '@interface/mappers/error'
 import { paginationDefaults, SortDirection } from '@shared/config'
 
@@ -29,12 +32,12 @@ import { paginationDefaults, SortDirection } from '@shared/config'
  * //   ]
  * // }
  */
-const findErrorsPaginatedAndSorted = async (
-    uploadUUID: string,
-    page: number,
-    limit: number,
-    sort: SortDirection = SortDirection.ASC,
-): Promise<ProcessErrorsPaginatedResponse | IError> => {
+const findErrorsPaginatedAndSorted = async ({
+    uploadUUID,
+    page,
+    limit,
+    sort,
+}: FindErrorsPaginatedAndSortedParams): Promise<ProcessErrorsPaginatedResponse | IError> => {
     if (!uploadUUID) return findError(ECODES.UPLOAD_UUID_NOT_PROVIDED)
     if (page === undefined) page = paginationDefaults.page
     if (limit === undefined) limit = paginationDefaults.limit

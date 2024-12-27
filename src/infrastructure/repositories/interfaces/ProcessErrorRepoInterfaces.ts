@@ -1,4 +1,5 @@
 import { IProcessError } from '@domain/models/ProcessError'
+import { SortDirection } from '@shared/config'
 
 interface ProcessErrorsPaginatedResponse {
     page: number
@@ -8,4 +9,11 @@ interface ProcessErrorsPaginatedResponse {
     data: IProcessError[]
 }
 
-export { ProcessErrorsPaginatedResponse }
+interface FindErrorsPaginatedAndSortedParams {
+    uploadUUID: string
+    page?: number
+    limit?: number
+    sort?: SortDirection
+}
+
+export { ProcessErrorsPaginatedResponse, FindErrorsPaginatedAndSortedParams }
