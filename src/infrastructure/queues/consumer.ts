@@ -25,8 +25,14 @@ async function startConsumer() {
       console.debug(`Processing uploadUUID: ${uploadUUID}`);
       await uploadRepo.updateUploadStatus(uploadStatus, Status.PROCESSING);
 
-      await ProcessFile(uploadStatus);
- 
+      const err = await ProcessFile(uploadStatus);
+      if (err) {
+        console.error(`Error processing uploadUUID: ${uploadUUID}`);
+        await uploadRepo.updateUploadStatus(uploadStatus, Status.ERROR);
+        channel.ack(msg);
+        return;
+      }
+
       await uploadRepo.updateUploadStatus(uploadStatus, Status.DONE);
       console.debug(`Finished processing uploadUUID: ${uploadUUID}`);
       channel.ack(msg);

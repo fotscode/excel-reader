@@ -3,7 +3,8 @@ import mongoose, { Document } from 'mongoose'
 enum Status {
   PENDING = 'pending',
   PROCESSING = 'processing',
-  DONE = 'done'
+  DONE = 'done',
+  ERROR = 'error'
 }
 
 interface IUploadStatus extends Document {
@@ -34,7 +35,7 @@ uploadStatusSchema.pre('save', function (next) {
   if (this.status === Status.PROCESSING && !this.timestamp_started) {
     this.timestamp_started = now
   }
-  if (this.status === Status.DONE && !this.timestamp_finished) {
+  if ((this.status === Status.DONE || this.status === Status.ERROR) && !this.timestamp_finished) {
     this.timestamp_finished = now
   }
   next()

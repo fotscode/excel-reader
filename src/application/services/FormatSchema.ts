@@ -1,19 +1,51 @@
 import { parseType } from '@infrastructure/repositories/DynamicFileRepo';
 import RowCol from '../interfaces/RowCol';
 
-// converts format string to json format
-// e.g: "{test: Array<String>}" => {test:["String"]}
-// e.g: "{test: Array<Array<Number>>}" => {test:[["Number"]]}
-// e.g: "{name: String, age: Number,nums?:Array<Number>}" 
-//    => {name:"String",age:"Number","nums?":["Number"]}
+/**
+ * Converts a format string to JSON format.
+ * 
+ * This function takes a string representing a format and converts it into a JSON-like structure.
+ * It supports `Array` types and optional fields (indicated with `?`).
+ *
+ * @example
+ * const format = "{test: Array<String>}";
+ * const json = convertStringToJson(format);
+ * console.log(json); // Output: { test: ["String"] }
+ */
 function convertStringToJson(format: string) {
     return JSON.parse(format.replace(/Array</g, "[").replace(/>/g, "]").replace(/\b(\w+\??)/g, '"$1"'));
 }
 
-// solves RNF #1
-// parses primitive types to functions depending on underlying database (parseType implementation)
-// e.g: "String" => { type: String, set: setFn, required: true } in case of mongoose
-// e.g: "Number" => { type: Number, set: setFn, required: true } in case of mongoose
+/**
+ * Converts a JSON schema to a format compatible with the underlying database.
+ * 
+ * This function parses primitive types and nested objects into database schema format 
+ * (such as Mongoose). The `parseType` function is used to transform primitive types into 
+ * proper database schema definitions (e.g., `{ type: String, set: setFn, required: true }` for Mongoose).
+ * It also handles arrays and nested objects recursively, converting them into an appropriate schema.
+ *
+ * @example
+ * const jsonSchema = {
+ *   name: "String",
+ *   age: "Number",
+ *   address: {
+ *     street: "String",
+ *     city: "String",
+ *   },
+ *   hobbies?: ["String"]
+ * };
+ * const schema = createSchemaFromJSON(jsonSchema);
+ * console.log(schema);
+ * // Output: {
+ * //   name: { type: String, set: setFn, required: true },
+ * //   age: { type: Number, set: setFn, required: true },
+ * //   address: {
+ * //     street: { type: String, set: setFn, required: true },
+ * //     city: { type: String, set: setFn, required: true },
+ * //   },
+ * //   "hobbies?": { type: [String], required: false }
+ * // }
+ */
 function createSchemaFromJSON(jsonSchema: any) {
     const schema = {} as { [key: string]: any };
 
@@ -45,7 +77,17 @@ function createSchemaFromJSON(jsonSchema: any) {
     return schema;
 }
 
-// inserts value in nested array
+/**
+ * Inserts a value into a nested array, flattening the array structure if necessary.
+ * 
+ * This function recursively traverses the outer arrays in the nested array and inserts 
+ * the value into the innermost array.
+ * 
+ * @example
+ * const nestedArray = [[[]]];
+ * insertValueNested(42, nestedArray);
+ * console.log(nestedArray); // Output: [[[42]]]
+ */
 function insertValueNested(value: any, arr: any[]) {
     while (Array.isArray(arr[0])) {
         arr = arr[0]
@@ -53,8 +95,23 @@ function insertValueNested(value: any, arr: any[]) {
     arr.push(value)
 }
 
-// checks if array format is valid
-// needs to be an array with only one element
+/**
+ * Checks if the array format is valid.
+ * 
+ * This function validates that the provided value is an array with exactly one element.
+ * If the array has more than one element or is not an array, it throws an error.
+ *
+ * @example
+ * const validArray = ["String"];
+ * console.log(isValidArray(validArray, "example")); // Output: true
+ * 
+ * const invalidArray = ["String", "Number"];
+ * try {
+ *     console.log(isValidArray(invalidArray, "example")); // Throws error
+ * } catch (e) {
+ *     console.log(e.message); // Output: Invalid array definition for key "example"
+ * }
+ */
 function isValidArray(arr: any, key: string) {
     if (!Array.isArray(arr)) {
         return false
@@ -65,6 +122,24 @@ function isValidArray(arr: any, key: string) {
     throw new Error(`Invalid array definition for key "${key}"`);
 }
 
+/**
+ * Retrieves the row and column information for errors based on the schema and error data.
+ * 
+ * This function compares the keys in the `errors` object with the keys in the `schema` object. 
+ * If a key from the `errors` object exists in the `schema`, it adds the corresponding row and column 
+ * information to the result array. The row is provided as an argument, and the column is determined 
+ * by the index of the schema key.
+ * 
+ * @throws {Error} Throws an error if the `errors` or `schema` are not objects.
+ * 
+ * @example
+ * const schema = { name: { type: String }, email: { type: String } };
+ * const errors = { email: "Email is invalid" };
+ * const row = 1;
+ * const result = getRowErrors(row, errors, schema);
+ * console.log(result);
+ * // Output: [{ row: 1, col: 2 }]
+ */
 function getRowErrors(row: number, errors: any, schema: any): RowCol[] {
     let schemaKeys = Object.keys(schema)
     let errorKeys = Object.keys(errors)
@@ -78,6 +153,26 @@ function getRowErrors(row: number, errors: any, schema: any): RowCol[] {
     return res
 }
 
+/**
+ * Populates a row object with values mapped to a schema.
+ * 
+ * This function takes a row object, an array of values, and a schema, and populates the row object 
+ * with values based on the schema's keys and types. It also handles specific transformations:
+ * - If a value is a comma-separated string, it is split into an array.
+ * - If the schema type is `Number`, the resulting array is converted to numbers and sorted in ascending order.
+ * 
+ * @example
+ * const row = {};
+ * const values = ["John", 25, "1,3,2"];
+ * const schema = {
+ *   name: { type: String },
+ *   age: { type: Number },
+ *   scores: { type: [Number] }
+ * };
+ * const result = fillRowObject(row, values, schema);
+ * console.log(result);
+ * // Output: { name: "John", age: 25, scores: [1, 2, 3] }
+ */
 function fillRowObject(row: any, values: any[], schema: { [key: string]: any }) {
     let schemaKeys = Object.keys(schema)
     let schemaValues = Object.values(schema)

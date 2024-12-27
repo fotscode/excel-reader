@@ -6,6 +6,7 @@ enum ECODES {
     UPLOAD_UUID_NOT_PROVIDED = 'UPLOAD_UUID_NOT_PROVIDED',
     PAGE_MUST_BE_GREATER_THAN_ZERO = 'PAGE_MUST_BE_GREATER_THAN_ZERO',
     LIMIT_MUST_BE_GREATER_THAN_ZERO = 'LIMIT_MUST_BE_GREATER_THAN_ZERO',
+    SCHEMA_ERROR = 'SCHEMA_ERROR',
 }
 
 type ErrorKeys = keyof typeof ECODES;
@@ -44,6 +45,11 @@ const ERRORS: Record<ErrorKeys, IError> = {
         message: 'Limit must be greater than zero',
         httpCode: 400,
     },
+    SCHEMA_ERROR: {
+        identifier: ECODES.SCHEMA_ERROR,
+        message: 'Error creating schema',
+        httpCode: 500,
+    }
 }
 
 const findError = (identifier: ECODES, extra: any = undefined): IError => {
