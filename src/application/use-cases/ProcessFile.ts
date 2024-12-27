@@ -1,5 +1,5 @@
-import { IUploadStatus } from "src/domain/models/UploadStatus";
-import { convertStringToJson, createSchemaFromJSON, fillRowObject, getRowErrors } from "@application/services/FormatSchema";
+import { IUploadStatus } from "@domain/models/UploadStatus";
+import { convertStringToJson, createSchemaFromJSON, populateRowWithValues, getRowErrors } from "@application/services/FormatSchema";
 import { createModelFromSchema } from "@infrastructure/repositories/DynamicFileRepo";
 import { ReadXLSXFile } from "@application/services/ReadXLSX";
 import { IProcessError } from "@domain/models/ProcessError";
@@ -8,7 +8,7 @@ import { BATCH_SIZE } from "@infrastructure/db/mongooseConfig";
 import { saveBatch } from "@infrastructure/repositories/common";
 import { uploadsPath } from "@shared/config";
 import { Model } from "mongoose";
-import { ECODES, findError } from "@interface/mappers/error";
+import { ECODES } from "@interface/mappers/error";
 
 function getSchemaAndModel(uploadStatus: IUploadStatus): { schema: any, model: any, err?: ECODES } {
     try {
@@ -21,35 +21,36 @@ function getSchemaAndModel(uploadStatus: IUploadStatus): { schema: any, model: a
     }
 }
 
-function initializeVariables(model: Model<any>): { rows: any[], errors: IProcessError[], index: number } {
+function initializeVariables(model: Model<any>): { rows: any[], errors: IProcessError[], rowNumber: number } {
     let rows = [] as typeof model[];
     let errors = [] as IProcessError[];
-    let index = 0;
-    return { rows, errors, index }
+    let rowNumber = 0;
+    return { rows, errors, rowNumber }
 }
 
 async function ProcessFile(uploadStatus: IUploadStatus): Promise<void | ECODES> {
-    const { schema, model: DynamicModel, err } = getSchemaAndModel(uploadStatus);
-    if (err) return err
-    let { rows, errors, index } = initializeVariables(DynamicModel);
+    const { schema, model: DynamicModel, err: errSchema } = getSchemaAndModel(uploadStatus);
+    if (errSchema) return errSchema
+    let { rows, errors, rowNumber } = initializeVariables(DynamicModel);
 
-    const data = ReadXLSXFile(`${uploadsPath}/${uploadStatus.filename}`);
+    const { data, err: errXLSX } = ReadXLSXFile(`${uploadsPath}/${uploadStatus.filename}`);
+    if (errXLSX) return errXLSX
 
     console.debug(`Processing data with ${data.length} rows and batch size of ${BATCH_SIZE}`);
     for (let row of data) {
-        index++;
-        let obj = new DynamicModel()
-        fillRowObject(obj, row, schema)
-        let error = obj.validateSync();
+        rowNumber++;
+        let entity = new DynamicModel()
+        populateRowWithValues(entity, row, schema)
+        let error = entity.validateSync();
         if (error) {
-            let rowErrors = getRowErrors(index, error.errors, schema)
-            for (let rowError of rowErrors) {
-                errors.push(errorRepo.createProcessError(uploadStatus, rowError))
+            let rowErrors = getRowErrors(rowNumber, error.errors, schema)
+            for (let rowCol of rowErrors) { // row and col where the error occurred
+                errors.push(errorRepo.createProcessError(uploadStatus, rowCol))
             }
             await errorRepo.saveBatchErrors(errors)
             continue
         }
-        rows.push(obj)
+        rows.push(entity)
         await saveBatch(DynamicModel, rows)
     }
 

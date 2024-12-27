@@ -1,5 +1,5 @@
 import { parseType } from '@infrastructure/repositories/DynamicFileRepo';
-import RowCol from '../interfaces/RowCol';
+import RowCol from '@application/interfaces/RowCol';
 
 /**
  * Converts a format string to JSON format.
@@ -24,6 +24,8 @@ function convertStringToJson(format: string) {
  * proper database schema definitions (e.g., `{ type: String, set: setFn, required: true }` for Mongoose).
  * It also handles arrays and nested objects recursively, converting them into an appropriate schema.
  *
+ * @throws {Error} Throws an error if the schema type is not supported.
+ * 
  * @example
  * const jsonSchema = {
  *   name: "String",
@@ -101,6 +103,8 @@ function insertValueNested(value: any, arr: any[]) {
  * This function validates that the provided value is an array with exactly one element.
  * If the array has more than one element or is not an array, it throws an error.
  *
+ * @throws {Error} Throws an error if the array is not valid.
+ * 
  * @example
  * const validArray = ["String"];
  * console.log(isValidArray(validArray, "example")); // Output: true
@@ -161,6 +165,8 @@ function getRowErrors(row: number, errors: any, schema: any): RowCol[] {
  * - If a value is a comma-separated string, it is split into an array.
  * - If the schema type is `Number`, the resulting array is converted to numbers and sorted in ascending order.
  * 
+ * @throws {Error} Throws an error if the schema keys and values are not arrays of the same length.
+ * 
  * @example
  * const row = {};
  * const values = ["John", 25, "1,3,2"];
@@ -169,11 +175,11 @@ function getRowErrors(row: number, errors: any, schema: any): RowCol[] {
  *   age: { type: Number },
  *   scores: { type: [Number] }
  * };
- * const result = fillRowObject(row, values, schema);
+ * const result = populateRowWithValues(row, values, schema);
  * console.log(result);
  * // Output: { name: "John", age: 25, scores: [1, 2, 3] }
  */
-function fillRowObject(row: any, values: any[], schema: { [key: string]: any }) {
+function populateRowWithValues(row: any, values: any[], schema: { [key: string]: any }) {
     let schemaKeys = Object.keys(schema)
     let schemaValues = Object.values(schema)
     for (let i = 0; i < schemaKeys.length; i++) {
@@ -191,5 +197,5 @@ function fillRowObject(row: any, values: any[], schema: { [key: string]: any }) 
     return row
 }
 
-export { convertStringToJson, createSchemaFromJSON, getRowErrors, fillRowObject }
-export default { convertStringToJson, createSchemaFromJSON, getRowErrors, fillRowObject }
+export { convertStringToJson, createSchemaFromJSON, getRowErrors, populateRowWithValues }
+export default { convertStringToJson, createSchemaFromJSON, getRowErrors, populateRowWithValues }
