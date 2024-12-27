@@ -1,0 +1,70 @@
+version: '3.8'
+services:
+    mongodb:
+        image: mongo:6-jammy
+        container_name: 'mongodb'
+        privileged: true
+        ports:
+            - '27017:27017'
+        volumes:
+            - ./.volumes/dbdata6:/data/db
+        networks:
+            - common_net
+        healthcheck:
+            test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+            start_period: 5s
+            interval: 10s
+            timeout: 5s
+            retries: 5
+
+    rabbitmq:
+        image: rabbitmq:4.0.5
+        container_name: 'rabbitmq'
+        privileged: true
+        ports:
+            - 5672:5672
+            - 15672:15672
+        volumes:
+            - ./.volumes/rabbitmq/data/:/var/lib/rabbitmq/
+            - ./.volumes/rabbitmq/log/:/var/log/rabbitmq/
+        networks:
+            - common_net
+        healthcheck:
+            test: rabbitmq-diagnostics -q ping
+            start_period: 5s
+            interval: 10s
+            timeout: 5s
+            retries: 5
+    api:
+        build:
+            context: .
+            dockerfile: Dockerfile.api
+        volumes:
+            - ./:/app/
+        ports:
+            - '3000:3000'
+        environment:
+            - DB_HOST=mongodb
+            - AMQP_HOST=rabbitmq
+        networks:
+            - common_net
+        depends_on:
+            rabbitmq:
+                condition: service_healthy
+    consumer:
+        build:
+            context: .
+            dockerfile: Dockerfile.consumer
+        volumes:
+            - ./:/app/
+        environment:
+            - DB_HOST=mongodb
+            - AMQP_HOST=rabbitmq
+        networks:
+            - common_net
+        depends_on:
+            rabbitmq:
+                condition: service_healthy
+networks:
+    common_net:
+        driver: bridge
