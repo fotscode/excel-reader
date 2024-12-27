@@ -2,27 +2,18 @@ import ProcessError, { IProcessError } from "@domain/models/ProcessError";
 import RowCol from "@application/interfaces/RowCol";
 import { IUploadStatus } from "@domain/models/UploadStatus";
 import { saveBatch } from "./common";
+import { ProcessErrorsPaginatedResponse } from "./interfaces/ProcessErrorRepoInterfaces";
+import { ECODES, findError, IError } from "@interface/mappers/error";
+import { paginationDefaults } from "@shared/config";
 
-const findErrorsPaginatedAndSorted = async (uploadUUID: string, page: number, limit: number, sort = 'asc') => {
-    if (!uploadUUID) {
-        return new Error('Upload UUID is required');
-    }
-    // TODO: CONFIG DEFAULTS
-    if (page === undefined) {
-        page = 1;
-    }
-    if (limit === undefined) {
-        limit = 10;
-    }
-    if (sort === undefined) {
-        sort = 'asc';
-    }
-    if (page < 1) {
-        return new Error('Page must be greater than 0');
-    }
-    if (limit < 1) {
-        return new Error('Limit must be greater than 0'); // TODO: make custom error
-    }
+const findErrorsPaginatedAndSorted = async (uploadUUID: string, page: number, limit: number, sort = 'asc'): Promise<ProcessErrorsPaginatedResponse | IError> => {
+    if (!uploadUUID) return findError(ECODES.UPLOAD_UUID_NOT_PROVIDED)
+    if (page === undefined) page = paginationDefaults.page
+    if (limit === undefined) limit = paginationDefaults.limit
+    if (sort === undefined) sort = paginationDefaults.sort
+    if (page < 1 || isNaN(page)) return findError(ECODES.PAGE_MUST_BE_GREATER_THAN_ZERO)
+    if (limit < 1 || isNaN(limit)) return findError(ECODES.LIMIT_MUST_BE_GREATER_THAN_ZERO)
+
     const sortDirection = sort === 'asc' ? 1 : -1;
     const skip = (page - 1) * limit;
     const errors = await ProcessError.find({ uploadUUID })
