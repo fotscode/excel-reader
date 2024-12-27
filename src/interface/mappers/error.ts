@@ -7,6 +7,8 @@ enum ECODES {
     PAGE_MUST_BE_GREATER_THAN_ZERO = 'PAGE_MUST_BE_GREATER_THAN_ZERO',
     LIMIT_MUST_BE_GREATER_THAN_ZERO = 'LIMIT_MUST_BE_GREATER_THAN_ZERO',
     SCHEMA_ERROR = 'SCHEMA_ERROR',
+    FILE_READ_ERROR = 'FILE_READ_ERROR',
+    CHANNEL_NOT_CREATED = 'CHANNEL_NOT_CREATED',
 }
 
 type ErrorKeys = keyof typeof ECODES;
@@ -49,7 +51,17 @@ const ERRORS: Record<ErrorKeys, IError> = {
         identifier: ECODES.SCHEMA_ERROR,
         message: 'Error creating schema',
         httpCode: 500,
-    }
+    },
+    FILE_READ_ERROR: {
+        identifier: ECODES.FILE_READ_ERROR,
+        message: 'Error reading file',
+        httpCode: 500,
+    },
+    CHANNEL_NOT_CREATED: {
+        identifier: ECODES.CHANNEL_NOT_CREATED,
+        message: 'Channel not created',
+        httpCode: 503,
+    },
 }
 
 const findError = (identifier: ECODES, extra: any = undefined): IError => {
