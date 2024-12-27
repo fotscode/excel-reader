@@ -7,6 +7,9 @@ interface IStatusSucessResponse {
     format: string;
     filename: string;
     errors: ProcessErrorsPaginatedResponse;
+    timestamp_enqueued: string;
+    timestamp_started: string;
+    timestamp_finished: string;
 }
 
 const getStatusSucessResponse = (uploadStatus: IUploadStatus, errors: ProcessErrorsPaginatedResponse): IStatusSucessResponse => {
@@ -15,7 +18,10 @@ const getStatusSucessResponse = (uploadStatus: IUploadStatus, errors: ProcessErr
         status: uploadStatus.status,
         format: uploadStatus.format,
         filename: uploadStatus.filename,
-        errors
+        errors,
+        timestamp_enqueued: uploadStatus.timestamp_enqueued,
+        timestamp_started: uploadStatus.timestamp_started,
+        timestamp_finished: uploadStatus.timestamp_finished
     }
 }
 
