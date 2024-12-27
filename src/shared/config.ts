@@ -15,4 +15,6 @@ const paginationDefaults = {
     sort: SortDirection.ASC,
 }
 
-export { uploadsPath, paginationDefaults, multerUploadPath, SortDirection }
+const defaultSaltValue = (process.env.SALT_ROUNDS && parseInt(process.env.SALT_ROUNDS)) || 10
+
+export { uploadsPath, paginationDefaults, multerUploadPath, SortDirection, defaultSaltValue }
