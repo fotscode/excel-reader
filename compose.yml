@@ -40,8 +40,6 @@ services:
         build:
             context: .
             dockerfile: Dockerfile.api
-        volumes:
-            - ./:/app/
         ports:
             - '3000:3000'
         environment:
@@ -59,8 +57,6 @@ services:
         build:
             context: .
             dockerfile: Dockerfile.consumer
-        volumes:
-            - ./:/app/
         environment:
             - DB_HOST=mongodb
             - AMQP_HOST=rabbitmq
