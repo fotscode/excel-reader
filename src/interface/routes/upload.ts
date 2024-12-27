@@ -13,7 +13,11 @@ router.post('/', upload.single('file'), async (req: RequestWithFile, res) => {
   }
   const savedStatus = await uploadRepo.createPendingUploadStatus(req.body.format, req.file.filename);
   const { uploadUUID, format, filename } = savedStatus;
-  queues.sendMessageToQueue({ uploadUUID, format, filename });
+  const err = await queues.sendMessageToQueue({ uploadUUID, format, filename });
+  if (err) {
+    makeHTTPError(res, err);
+    return;
+  }
   res.json({ uploadUUID })
 });
 
