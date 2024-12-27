@@ -4,9 +4,32 @@ import { IUploadStatus } from "@domain/models/UploadStatus";
 import { saveBatch } from "./common";
 import { ProcessErrorsPaginatedResponse } from "./interfaces/ProcessErrorRepoInterfaces";
 import { ECODES, findError, IError } from "@interface/mappers/error";
-import { paginationDefaults } from "@shared/config";
+import { paginationDefaults, SortDirection } from "@shared/config";
 
-const findErrorsPaginatedAndSorted = async (uploadUUID: string, page: number, limit: number, sort = 'asc'): Promise<ProcessErrorsPaginatedResponse | IError> => {
+/**
+ * Retrieves paginated and sorted `ProcessError` records for a specific upload UUID.
+ * 
+ * This function fetches `ProcessError` records associated with a given `uploadUUID` from the database. 
+ * The results are paginated and sorted by `row` and `col` in ascending or descending order. It also validates 
+ * the pagination parameters and returns an appropriate error if they are invalid.
+ 
+ * @example
+ * const response = await findErrorsPaginatedAndSorted("uuid-12345", 1, 10, "asc");
+ * console.log(response);
+ * // Output:
+ * // {
+ * //   page: 1,
+ * //   limit: 10,
+ * //   totalErrors: 25,
+ * //   totalPages: 3,
+ * //   data: [
+ * //     { row: 1, col: 2 },
+ * //     { row: 2, col: 3 },
+ * //     ...
+ * //   ]
+ * // }
+ */
+const findErrorsPaginatedAndSorted = async (uploadUUID: string, page: number, limit: number, sort: SortDirection = SortDirection.ASC): Promise<ProcessErrorsPaginatedResponse | IError> => {
     if (!uploadUUID) return findError(ECODES.UPLOAD_UUID_NOT_PROVIDED)
     if (page === undefined) page = paginationDefaults.page
     if (limit === undefined) limit = paginationDefaults.limit
@@ -42,6 +65,11 @@ const createProcessError = (uploadStatus: IUploadStatus, rowCol: RowCol) => {
     return processError
 }
 
+/**
+ * Save a batch of ProcessError documents to the database
+ * 
+ * @see saveBatch - the function that actually saves the batch of documents
+ */
 const saveBatchErrors = async (errors: IProcessError[], force: boolean | undefined = false) => {
     await saveBatch(ProcessError, errors, force);
 }
