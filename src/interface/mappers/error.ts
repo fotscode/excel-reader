@@ -9,6 +9,10 @@ enum ECODES {
     SCHEMA_ERROR = 'SCHEMA_ERROR',
     FILE_READ_ERROR = 'FILE_READ_ERROR',
     CHANNEL_NOT_CREATED = 'CHANNEL_NOT_CREATED',
+    AUTHENTICATION_CREDENTIALS_FAILED = 'AUTHENTICATION_CREDENTIALS_FAILED',
+    AUTHENTICATION_TYPE_INVALID = 'AUTHENTICATION_TYPE_INVALID',
+    AUTHENTICATION_HEADER_MISSING = 'AUTHENTICATION_HEADER_MISSING',
+    AUTHORIZATION_INSUFFICIENT_PERMISSIONS = 'AUTHORIZATION_INSUFFICIENT_PERMISSIONS',
 }
 
 type ErrorKeys = keyof typeof ECODES
@@ -61,6 +65,26 @@ const ERRORS: Record<ErrorKeys, IError> = {
         identifier: ECODES.CHANNEL_NOT_CREATED,
         message: 'Channel not created',
         httpCode: 503,
+    },
+    AUTHENTICATION_CREDENTIALS_FAILED: {
+        identifier: ECODES.AUTHENTICATION_CREDENTIALS_FAILED,
+        message: 'Authorization credentials are not correct',
+        httpCode: 401,
+    },
+    AUTHENTICATION_TYPE_INVALID: {
+        identifier: ECODES.AUTHENTICATION_TYPE_INVALID,
+        message: 'Authorization type is invalid',
+        httpCode: 401,
+    },
+    AUTHENTICATION_HEADER_MISSING: {
+        identifier: ECODES.AUTHENTICATION_HEADER_MISSING,
+        message: 'Authorization header is missing',
+        httpCode: 401,
+    },
+    AUTHORIZATION_INSUFFICIENT_PERMISSIONS: {
+        identifier: ECODES.AUTHORIZATION_INSUFFICIENT_PERMISSIONS,
+        message: 'Insufficient permissions',
+        httpCode: 403,
     },
 }
 
