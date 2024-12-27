@@ -6,15 +6,16 @@
     "scripts": {
         "build": "tsc && tsc-alias",
         "start": "tsx ./src/bin/www.ts",
-        "dev": "nodemon --exec 'tsx -r tsconfig-paths/register' ./src/bin/www.ts",
+        "dev": "nodemon --exec 'tsx' ./src/bin/www.ts",
         "consumer": "tsx ./src/infrastructure/queues/consumer.ts",
-        "consumerDev": "nodemon  --exec 'tsx -r tsconfig-paths/register' ./src/infrastructure/queues/consumer.ts",
-        "preview": "node -r tsconfig-paths/register dist/bin/www.js",
-        "consumerPreview": "node -r tsconfig-paths/register dist/infrastructure/queues/consumer.js",
+        "consumerDev": "nodemon  --exec 'tsx' ./src/infrastructure/queues/consumer.ts",
+        "preview": "node dist/bin/www.js",
+        "consumerPreview": "node dist/infrastructure/queues/consumer.js",
         "format": "prettier --write ."
     },
     "dependencies": {
         "amqplib": "^0.10.5",
+        "bcryptjs": "^2.4.3",
         "cookie-parser": "~1.4.4",
         "debug": "~2.6.9",
         "express": "~4.16.1",
@@ -26,6 +27,7 @@
     },
     "devDependencies": {
         "@types/amqplib": "^0.10.6",
+        "@types/bcryptjs": "^2.4.6",
         "@types/cookie-parser": "^1.4.8",
         "@types/debug": "^4.1.12",
         "@types/express": "^5.0.0",
