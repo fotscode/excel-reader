@@ -1,4 +1,7 @@
-import ProcessError from "@domain/models/ProcessError";
+import ProcessError, { IProcessError } from "@domain/models/ProcessError";
+import RowCol from "@application/interfaces/RowCol";
+import { IUploadStatus } from "@domain/models/UploadStatus";
+import { saveBatch } from "./common";
 
 const findErrorsPaginatedAndSorted = async (uploadUUID: string, page: number, limit: number, sort = 'asc') => {
     if (!uploadUUID) {
@@ -38,4 +41,18 @@ const findErrorsPaginatedAndSorted = async (uploadUUID: string, page: number, li
     }
 }
 
-export default { findErrorsPaginatedAndSorted }
+const createProcessError = (uploadStatus: IUploadStatus, rowCol: RowCol) => {
+    const processError = new ProcessError({
+        _upload: uploadStatus._id,
+        uploadUUID: uploadStatus.uploadUUID,
+        row: rowCol.row,
+        col: rowCol.col,
+    });
+    return processError
+}
+
+const saveBatchErrors = async (errors: IProcessError[], force: boolean | undefined = false) => {
+    await saveBatch(ProcessError, errors, force);
+}
+
+export default { findErrorsPaginatedAndSorted, createProcessError, saveBatchErrors }
