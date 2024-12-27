@@ -3,6 +3,10 @@ import multer from 'multer';
 type DestinationCallback = (error: Error | null, destination: string) => void
 type FileNameCallback = (error: Error | null, filename: string) => void
 
+interface RequestWithFile extends Request {
+  file?: Express.Multer.File;
+}
+
 // Set up storage for uploaded files
 const storage = multer.diskStorage({
   destination: (req: Request, file: any, cb: DestinationCallback) => {
@@ -16,4 +20,5 @@ const storage = multer.diskStorage({
 // Create the multer instance
 const upload = multer({ storage: storage });
 
+export { RequestWithFile }
 export default upload
