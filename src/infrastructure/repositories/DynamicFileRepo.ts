@@ -1,10 +1,6 @@
 import mongoose, { Model } from 'mongoose';
+import { IMongooseType } from './interfaces/DynamicFileRepoInterfaces';
 
-interface IMongooseType {
-    type: any,
-    set?: (value: any) => any,
-    required?: boolean
-}
 
 // function to parse primitive types for mongoose schemas
 const parseType = (type: string, isRequired: boolean): IMongooseType => {
