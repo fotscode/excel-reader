@@ -36,6 +36,7 @@ services:
             timeout: 5s
             retries: 5
     api:
+        container_name: 'api'
         build:
             context: .
             dockerfile: Dockerfile.api
@@ -51,7 +52,10 @@ services:
         depends_on:
             rabbitmq:
                 condition: service_healthy
+            mongodb:
+                condition: service_healthy
     consumer:
+        container_name: 'consumer'
         build:
             context: .
             dockerfile: Dockerfile.consumer
@@ -64,6 +68,8 @@ services:
             - common_net
         depends_on:
             rabbitmq:
+                condition: service_healthy
+            mongodb:
                 condition: service_healthy
 networks:
     common_net:
