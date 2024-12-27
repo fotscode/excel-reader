@@ -1,6 +1,6 @@
 interface RowCol {
-    row: number;
-    col: number;
+    row: number
+    col: number
 }
 
-export default RowCol;
+export default RowCol

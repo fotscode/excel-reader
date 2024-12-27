@@ -1,11 +1,11 @@
-const QUEUE_NAME = 'csv';
+const QUEUE_NAME = 'csv'
 
 interface AmqpConfig {
-    host: string;
-    port?: number;
-    user?: string;
-    password?: string;
-    vhost?: string;
+    host: string
+    port?: number
+    user?: string
+    password?: string
+    vhost?: string
 }
 
 const amqpConfig: AmqpConfig = {
@@ -14,6 +14,6 @@ const amqpConfig: AmqpConfig = {
     user: process.env.AMQP_USER,
     password: process.env.AMQP_PASSWORD,
     vhost: process.env.AMQP_VHOST,
-};
+}
 
 export { QUEUE_NAME, amqpConfig, AmqpConfig }

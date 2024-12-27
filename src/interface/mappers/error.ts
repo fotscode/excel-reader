@@ -1,4 +1,4 @@
-import { Response } from 'express';
+import { Response } from 'express'
 
 enum ECODES {
     FILE_NOT_FOUND = 'FILE_NOT_FOUND',
@@ -11,13 +11,13 @@ enum ECODES {
     CHANNEL_NOT_CREATED = 'CHANNEL_NOT_CREATED',
 }
 
-type ErrorKeys = keyof typeof ECODES;
+type ErrorKeys = keyof typeof ECODES
 
 interface IError {
-    identifier: ECODES;
-    message: string;
-    httpCode: number,
-    timestamp?: string,
+    identifier: ECODES
+    message: string
+    httpCode: number
+    timestamp?: string
     extra?: any
 }
 
@@ -65,15 +65,15 @@ const ERRORS: Record<ErrorKeys, IError> = {
 }
 
 const findError = (identifier: ECODES, extra: any = undefined): IError => {
-    const err = ERRORS[identifier];
-    err.timestamp = new Date().toISOString();
-    if (extra) err.extra = { extra };
+    const err = ERRORS[identifier]
+    err.timestamp = new Date().toISOString()
+    if (extra) err.extra = { extra }
     return err
 }
 
 const makeHTTPError = (res: Response, identifier: ECODES, extra: any = undefined) => {
-    const err = findError(identifier, extra);
-    res.status(err.httpCode).json(err);
+    const err = findError(identifier, extra)
+    res.status(err.httpCode).json(err)
 }
 
 export { IError, findError, ECODES, makeHTTPError }

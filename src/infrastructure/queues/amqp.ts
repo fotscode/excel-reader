@@ -1,7 +1,7 @@
-import amqp from 'amqplib';
-import { AmqpConfig, amqpConfig, QUEUE_NAME } from './config';
+import amqp from 'amqplib'
+import { AmqpConfig, amqpConfig, QUEUE_NAME } from './config'
 
-let channel: amqp.Channel;
+let channel: amqp.Channel
 
 const buildAmqpConnectionString = (config: AmqpConfig): string => {
     const {
@@ -10,36 +10,34 @@ const buildAmqpConnectionString = (config: AmqpConfig): string => {
         user,
         password,
         vhost = '/',
-    } = config;
+    } = config
 
-    const encodedUser = user ? encodeURIComponent(user) : '';
-    const encodedPassword = password ? encodeURIComponent(password) : '';
-    const encodedVhost = vhost.startsWith('/') ? vhost : `/${vhost}`;
+    const encodedUser = user ? encodeURIComponent(user) : ''
+    const encodedPassword = password ? encodeURIComponent(password) : ''
+    const encodedVhost = vhost.startsWith('/') ? vhost : `/${vhost}`
 
-    const credentials =
-        user && password ? `${encodedUser}:${encodedPassword}@` : '';
+    const credentials = user && password ? `${encodedUser}:${encodedPassword}@` : ''
 
-    return `amqp://${credentials}${host}:${port}${encodedVhost}`;
-};
-
+    return `amqp://${credentials}${host}:${port}${encodedVhost}`
+}
 
 const createChannel = async () => {
     if (channel) {
-        return channel;
+        return channel
     }
-    const connection = await amqp.connect(buildAmqpConnectionString(amqpConfig));
-    channel = await connection.createChannel();
-    await channel.assertQueue(QUEUE_NAME, { durable: true });
-    return channel;
+    const connection = await amqp.connect(buildAmqpConnectionString(amqpConfig))
+    channel = await connection.createChannel()
+    await channel.assertQueue(QUEUE_NAME, { durable: true })
+    return channel
 }
 
 const getUploadUUIDFromMessage = (msg: amqp.ConsumeMessage | null): string => {
     if (!msg) {
-        console.error("Empty message");
-        return '';
+        console.error('Empty message')
+        return ''
     }
-    const message = JSON.parse(msg.content.toString());
-    return message.uploadUUID;
+    const message = JSON.parse(msg.content.toString())
+    return message.uploadUUID
 }
 
 export { createChannel, getUploadUUIDFromMessage }

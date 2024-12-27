@@ -1,39 +1,30 @@
 {
-  "compilerOptions": {
-    "target": "ES6", /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
-    "module": "commonjs", /* Specify what module code is generated. */
-    "rootDir": "./src", /* Specify the root folder within your source files. */
-    "outDir": "./dist",
-    "baseUrl": ".", /* Specify the base directory to resolve non-relative module names. */
-    "paths": {
-      "@/*": [
-        "src/*"
-      ],
-      "@application/*": [
-        "src/application/*"
-      ],
-      "@domain/*": [
-        "src/domain/*"
-      ],
-      "@infrastructure/*": [
-        "src/infrastructure/*"
-      ],
-      "@interface/*": [
-        "src/interface/*"
-      ],
-      "@shared/*": [
-        "src/shared/*"
-      ]
+    "compilerOptions": {
+        "target": "es5",
+        "module": "ES2015",
+        "rootDir": "./src",
+        "outDir": "./dist",
+        "moduleResolution": "node",
+        "allowSyntheticDefaultImports": true,
+        "baseUrl": ".",
+        "paths": {
+            "src/*": ["src/*"],
+            "@application/*": ["src/application/*"],
+            "@domain/*": ["src/domain/*"],
+            "@infrastructure/*": ["src/infrastructure/*"],
+            "@interface/*": ["src/interface/*"],
+            "@shared/*": ["src/shared/*"]
+        },
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "strict": true,
+        "skipLibCheck": true,
+        "lib": ["ES2015", "DOM"]
     },
-    "esModuleInterop": true, /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */
-    "forceConsistentCasingInFileNames": true, /* Ensure that casing is correct in imports. */
-    "strict": true, /* Enable all strict type-checking options. */
-    "skipLibCheck": true /* Skip type checking all .d.ts files. */
-  },
-  "include": [
-    "**/*.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+    "include": ["**/*.ts"],
+    "exclude": ["node_modules"],
+    "tsc-alias": {
+        "resolveFullPaths": true,
+        "verbose": false
+    }
 }

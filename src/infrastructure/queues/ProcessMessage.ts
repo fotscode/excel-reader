@@ -1,7 +1,7 @@
 interface ProcessMessage {
-    uploadUUID: string;
-    filename: string;
-    format: string;
+    uploadUUID: string
+    filename: string
+    format: string
 }
 
-export default ProcessMessage;
+export default ProcessMessage
