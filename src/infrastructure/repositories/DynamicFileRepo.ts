@@ -2,7 +2,25 @@ import mongoose, { Model } from 'mongoose';
 import { IMongooseType } from './interfaces/DynamicFileRepoInterfaces';
 
 
-// function to parse primitive types for mongoose schemas
+/**
+ * Parses a primitive type for use in a Mongoose schema.
+ * 
+ * This function maps a type string to its corresponding Mongoose schema type configuration. 
+ * It also applies a setter function to validate values based on the specified type.
+ * 
+ * @example
+ * const stringField = parseType("string", true);
+ * console.log(stringField);
+ * // Output: { type: String, set: [Function: setFn], required: true }
+ * 
+ * const numberField = parseType("number", false);
+ * console.log(numberField);
+ * // Output: { type: Number, set: [Function: setFn], required: false }
+ * 
+ * const dateField = parseType("date", true);
+ * console.log(dateField);
+ * // Output: { type: Date, required: true }
+ */
 const parseType = (type: string, isRequired: boolean): IMongooseType => {
     const setFn = (value: any) => {
         if (typeof value != type.toLowerCase()) {
