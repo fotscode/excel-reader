@@ -1,12 +1,15 @@
 import { Router } from 'express'
-import upload, { RequestWithFile } from '@infrastructure/middleware/upload'
+import upload from '@infrastructure/middleware/upload'
 import queues from '@infrastructure/queues/publisher'
 import uploadRepo from '@infrastructure/repositories/UploadStatusRepo'
 import { ECODES, makeHTTPError } from '@interface/mappers/error'
+import { RequestWithFile } from '@interface/mappers/requests'
+import { P } from 'src/infrastructure/middleware/authorization'
+import Permission from 'src/domain/models/auth/Permission'
 
 const router = Router()
 
-router.post('/', upload.single('file'), async (req: RequestWithFile, res) => {
+router.post('/', P(Permission.UPLOAD), upload.single('file'), async (req: RequestWithFile, res) => {
     if (!req.file) {
         makeHTTPError(res, ECODES.FILE_NOT_FOUND)
         return

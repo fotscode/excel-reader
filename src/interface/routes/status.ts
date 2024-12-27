@@ -4,10 +4,12 @@ import errorsRepo from '@infrastructure/repositories/ProcessErrorRepo'
 import { ECODES, makeHTTPError } from '@interface/mappers/error'
 import { getStatusSucessResponse } from '@interface/mappers/statusSucess'
 import { SortDirection } from '@shared/config'
+import Permission from '@domain/models/auth/Permission'
+import { P } from '@infrastructure/middleware/authorization'
 
 const router = Router()
 
-router.get('/:uploadUUID', async (req, res) => {
+router.get('/:uploadUUID', P(Permission.REQUEST), async (req, res) => {
     const uploadUUID = req.params.uploadUUID
     const uploadStatus = await uploadRepo.findUploadStatusByUUID(uploadUUID)
     if (!uploadStatus) {
