@@ -1,0 +1,12 @@
+# Ignore node_modules
+src/node_modules/
+
+# Ignore build artifacts
+dist/
+
+# Ignore environment files
+.env
+
+# Ignore volumes
+.volumes/
+
