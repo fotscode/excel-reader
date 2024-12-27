@@ -17,7 +17,9 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 
-app.use('/upload', authenticate, uploadRouter)
-app.use('/status', authenticate, statusRouter)
+app.use(authenticate) // our auth
+
+app.use('/upload', uploadRouter)
+app.use('/status', statusRouter)
 
 export default app
