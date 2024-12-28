@@ -45,6 +45,8 @@ services:
         environment:
             - DB_HOST=mongodb
             - AMQP_HOST=rabbitmq
+        volumes:
+            - ./uploads:/app/uploads
         networks:
             - common_net
         depends_on:
@@ -60,6 +62,8 @@ services:
         environment:
             - DB_HOST=mongodb
             - AMQP_HOST=rabbitmq
+        volumes:
+            - ./uploads:/app/uploads
         networks:
             - common_net
         depends_on:
