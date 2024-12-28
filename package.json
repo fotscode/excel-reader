@@ -11,7 +11,8 @@
         "consumerDev": "nodemon  --exec 'tsx' ./src/infrastructure/queues/consumer.ts",
         "preview": "node dist/bin/www.js",
         "consumerPreview": "node dist/infrastructure/queues/consumer.js",
-        "format": "prettier --write ./src"
+        "format": "prettier --write ./src",
+        "test": "vitest --exclude .volumes --exclude dist"
     },
     "dependencies": {
         "amqplib": "^0.10.5",
@@ -43,6 +44,19 @@
         "tsconfig-paths": "^4.2.0",
         "tsx": "^4.19.2",
         "typescript": "^5.7.2",
-        "typescript-eslint": "^8.18.2"
+        "typescript-eslint": "^8.18.2",
+        "vite-tsconfig-paths": "^5.1.4",
+        "vitest": "^2.1.8"
+    },
+    "vitest": {
+        "globals": true,
+        "environment": "node",
+        "include": [
+            "tests/**/*.test.{js,ts}"
+        ],
+        "exclude": [
+            "node_modules",
+            "dist"
+        ]
     }
 }

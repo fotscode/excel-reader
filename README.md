@@ -149,3 +149,7 @@ Para guardar el estado de la tarea y los errores que se encuentra en la misma se
 `UploadFile`, `ProcessFile` y `RequestStatus` son las funcionalidades claves (`use-cases`) de la aplicación. En mayor detalle se puede ver la organización del código como varios anillos, dónde las dependencias van hacia el centro, siendo el centro independiente del resto (siguiendo [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)).
 
 ![gráfico de anillos concéntricos respetando la regla de la dependencia y la separación en capas](./docs/arch_circle.png)
+
+## Tests
+
+Se realizaron tests utilizando [vitest](https://vitest.dev/) por su velocidad y facilidad con typescript y ESModules. Para correr los tests se puede utilizar `npm` o `yarn`, utilizando la directiva `npm run test` o `yarn run test` respectivamente.
