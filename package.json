@@ -11,7 +11,7 @@
         "consumerDev": "nodemon  --exec 'tsx' ./src/infrastructure/queues/consumer.ts",
         "preview": "node dist/bin/www.js",
         "consumerPreview": "node dist/infrastructure/queues/consumer.js",
-        "format": "prettier --write ."
+        "format": "prettier --write ./src"
     },
     "dependencies": {
         "amqplib": "^0.10.5",
