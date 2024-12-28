@@ -109,6 +109,14 @@ Ejemplos de `format` pueden ser:
 
 Como respuesta se espera el `UUID` de la tarea encolada.
 
+Se proveen en la carpeta `examples/` ejemplos de archivos con extensión `.xlsx`:
+
+- `name_age_nums_provided.xlsx`, archivo con columnas `name,age,nums` con 2 filas:
+    - `Esteban,12,"3,8,1,9,100,34,78,32,97,12"`
+    - `24,Texto,`
+- `name_age_nums_200k.xlsx`, archivo con columnas `name,age,nums` con 200 mil filas respetando el órden y los numeros como opcionales (array de tamaño `[0,9]`).
+- `name_age_nums_5000length.xlsx`, archivo con columnas `name,age,nums` con mil filas respetando el órden y los numeros como opcionales (array de tamaño `[0,5000]`).
+
 ### GET status/UUID-upload-status
 
 Con el `UUID` obtenido del endpoint anterior, se puede consultar el estado de la tarea. Requiere el permiso `REQUEST`.
