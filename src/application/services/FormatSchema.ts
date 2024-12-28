@@ -1,5 +1,29 @@
-import { parseType } from '@infrastructure/repositories/DynamicFileRepo'
+import { createModelFromSchema, parseType } from '@infrastructure/repositories/DynamicFileRepo'
 import RowCol from '@application/interfaces/RowCol'
+import { ECODES } from '@interface/mappers/error'
+import { IUploadStatus } from '@domain/models/UploadStatus'
+
+/**
+ * Generates a schema and dynamic model based on the upload status and provided format.
+ *
+ * This function takes an upload status object, extracts the schema format as JSON,
+ * and creates a schema and corresponding dynamic model. In case of an error during
+ * the process, it returns a default response with an error code.
+ *
+ * @see convertStringToJson
+ * @see createSchemaFromJSON
+ * @see createModelFromSchema
+ */
+function getSchemaAndModel(uploadStatus: IUploadStatus): { schema: any; model: any; err?: ECODES } {
+    try {
+        const format = convertStringToJson(uploadStatus.format)
+        const schema = createSchemaFromJSON(format)
+        const DynamicModel = createModelFromSchema(schema, uploadStatus.uploadUUID)
+        return { schema, model: DynamicModel }
+    } catch (error) {
+        return { schema: null, model: null, err: ECODES.SCHEMA_ERROR }
+    }
+}
 
 /**
  * Converts a format string to JSON format.
@@ -201,5 +225,17 @@ function populateRowWithValues(row: any, values: any[], schema: { [key: string]:
     return row
 }
 
-export { convertStringToJson, createSchemaFromJSON, getRowErrors, populateRowWithValues }
-export default { convertStringToJson, createSchemaFromJSON, getRowErrors, populateRowWithValues }
+export {
+    convertStringToJson,
+    createSchemaFromJSON,
+    getRowErrors,
+    populateRowWithValues,
+    getSchemaAndModel,
+}
+export default {
+    convertStringToJson,
+    createSchemaFromJSON,
+    getRowErrors,
+    populateRowWithValues,
+    getSchemaAndModel,
+}

@@ -1,11 +1,9 @@
 import { IUploadStatus } from '@domain/models/UploadStatus'
 import {
-    convertStringToJson,
-    createSchemaFromJSON,
     populateRowWithValues,
     getRowErrors,
+    getSchemaAndModel,
 } from '@application/services/FormatSchema'
-import { createModelFromSchema } from '@infrastructure/repositories/DynamicFileRepo'
 import { ReadXLSXFile } from '@application/services/ReadXLSX'
 import { IProcessError } from '@domain/models/ProcessError'
 import errorRepo from '@infrastructure/repositories/ProcessErrorRepo'
@@ -14,17 +12,6 @@ import { saveBatch } from '@infrastructure/repositories/common'
 import { uploadsPath } from '@shared/config'
 import { Model } from 'mongoose'
 import { ECODES } from '@interface/mappers/error'
-
-function getSchemaAndModel(uploadStatus: IUploadStatus): { schema: any; model: any; err?: ECODES } {
-    try {
-        const format = convertStringToJson(uploadStatus.format)
-        const schema = createSchemaFromJSON(format)
-        const DynamicModel = createModelFromSchema(schema, uploadStatus.uploadUUID)
-        return { schema, model: DynamicModel }
-    } catch (error) {
-        return { schema: null, model: null, err: ECODES.SCHEMA_ERROR }
-    }
-}
 
 function initializeVariables(model: Model<any>): {
     rows: any[]
