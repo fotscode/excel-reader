@@ -1,6 +1,5 @@
 import { describe, it, expect } from 'vitest'
 
-// Assuming your function is in a module called 'yourModule'
 import { getRowErrors } from '@application/services/FormatSchema'
 import RowCol from '@application/interfaces/RowCol'
 
