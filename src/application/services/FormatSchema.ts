@@ -74,7 +74,7 @@ function convertStringToJson(format: string) {
  * //     street: { type: String, set: setFn, required: true },
  * //     city: { type: String, set: setFn, required: true },
  * //   },
- * //   "hobbies?": { type: [String], required: false }
+ * //   hobbies: { type: [String], required: false }
  * // }
  */
 function createSchemaFromJSON(jsonSchema: any) {
@@ -82,6 +82,7 @@ function createSchemaFromJSON(jsonSchema: any) {
 
     Object.entries(jsonSchema).forEach(([key, value]) => {
         const isRequired = !key.endsWith('?') // key is required if it doesn't end with "?"
+        key = key.replace(/\?/g, '') // remove "?" from key
         if (typeof value === 'string') {
             schema[key] = parseType(value, isRequired)
         } else if (typeof value === 'object' && !Array.isArray(value)) {
@@ -194,8 +195,6 @@ function getRowErrors(row: number, errors: any, schema: any): RowCol[] {
  * - If a value is a comma-separated string, it is split into an array.
  * - If the schema type is `Number`, the resulting array is converted to numbers and sorted in ascending order.
  *
- * @throws {Error} Throws an error if the schema keys and values are not arrays of the same length.
- *
  * @example
  * const row = {};
  * const values = ["John", 25, "1,3,2"];
@@ -231,6 +230,8 @@ export {
     getRowErrors,
     populateRowWithValues,
     getSchemaAndModel,
+    isValidArray,
+    insertValueNested,
 }
 export default {
     convertStringToJson,
