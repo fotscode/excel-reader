@@ -17,6 +17,11 @@ const authenticate = async (
 
     const [authType, encodedCredentials] = authHeader.split(' ')
 
+    if (!authType || !encodedCredentials) {
+        makeHTTPError(res, ECODES.AUTHENTICATION_HEADER_MISSING)
+        return
+    }
+
     if (authType !== 'Basic') {
         makeHTTPError(res, ECODES.AUTHENTICATION_TYPE_INVALID)
         return
