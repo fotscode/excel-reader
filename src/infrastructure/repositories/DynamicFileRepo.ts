@@ -39,7 +39,7 @@ const parseType = (type: string, isRequired: boolean): IMongooseType => {
         case 'objectid':
             return { type: mongoose.Schema.Types.ObjectId, set: setFn, required: isRequired }
         default:
-            return { type: mongoose.Schema.Types.Mixed }
+            throw new Error('Not valid type')
     }
 }
 
